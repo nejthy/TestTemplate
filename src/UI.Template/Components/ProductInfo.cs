@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using UI.Template.Components.Basic;
 using UI.Template.Framework.Extensions;
+using UI.Template.Framework.Helpers;
 
 
 namespace UI.Template.Components;
@@ -16,6 +17,7 @@ public class ProductInfo(By locator) : BaseProductInfo(locator)
     public Simple Quantity => new(By.XPath($"{Locator.ToSelector()}//span[contains(@ko-id,'quantity-display')]"));
     public Button AddToCartButton => new(By.XPath($"{Locator.ToSelector()}//button[@class='add-to-cart']"));
     private readonly Button _backToShopButton = new(By.XPath("//a[@class='back-to-shop']"));
+    private readonly Button _checkoutButton = new(By.XPath("//button[@class='checkout-button']"));
 
     /// <summary>
     /// Returns the current amount of the product selected in the quantity selector.
@@ -54,6 +56,33 @@ public class ProductInfo(By locator) : BaseProductInfo(locator)
         });
     }
 
+
+    /// <summary>
+    /// Returns the price of the product, parsed from the price text.
+    /// </summary>
+
+    public double GetParsedPrice()
+    {
+        return TextHelper.ExtractDouble(Price.GetText());
+    }
+
+    /// <summary>
+    /// Returns the number of items in stock, parsed from the stock status text.
+    /// </summary>
+    public int GetParsedStock()
+    {
+        return TextHelper.ExtractInt(StockStatus.GetText());
+    }
+
+
+    /// <summary>
+    /// Returns the parsed quantity of the product in the quantity selector.
+    /// </summary>
+    public int GetParsedQuantity()
+    {
+        return TextHelper.ExtractInt(Quantity.GetText());
+    }
+
     /// <summary>
     /// Add the product to the basket.
     /// </summary>
@@ -63,4 +92,11 @@ public class ProductInfo(By locator) : BaseProductInfo(locator)
     /// Navigate back to the shop page.
     /// </summary>
     public void BackToShop() => _backToShopButton.Click();
+
+    /// <summary>
+    /// Clicks on checkout in the basket.
+    /// </summary>
+    public void ClickCheckout() => _checkoutButton.Click();
+
+
 }
