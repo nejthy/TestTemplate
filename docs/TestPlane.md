@@ -1,5 +1,15 @@
 # Test Analysis: demoShop Application
 
+### Content:
+
+- [Introduction](Introduction.md)
+- [Prerequisites](Prerequisites.md)
+- [Guidelines](Guidelines.md)
+- [Running Tests](Running-Tests.md)
+- Test Plane
+
+---
+
 ## Introduction
 
 This document contains a test analysis for the newly delivered demoShop application.
@@ -35,3 +45,4 @@ For automation, I propose the following areas:
 
 **Justification:**
 It makes the most sense to automate the core, everyday scenarios. Since these flows are the most important parts of the app, we have to test them every time we release a new version. Writing automated tests for this saves us hours of repetitive manual work and gives us peace of mind that new updates won't break the main shopping process. On the other hand, trying to automate checks for visual design or specific text is usually a waste of time—it's much faster to just check those manually.
+
