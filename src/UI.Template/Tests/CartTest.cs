@@ -21,10 +21,15 @@ public class CartTest : BaseTest
 
         //** STEP 4 ***/
         productDetail.ProductInfoForm.AddToCart();
+        // wait for header counter to update before asserting
+        productDetail.Header.WaitForBasketCount(1);
         Assert.That(productDetail.Header.GetBasketCount(), Is.EqualTo(1), "Basket count is not 1. Check Add to Cart functionality.");
+
 
         //** STEP 5 ***/
         productDetail.Header.OpenBasketContainer();
+
+
         Assert.That(productDetail.Header.GetNthProduct(1, out string productName, out _), Is.True, "The first product in the basket was not found");
         Assert.That(productName, Is.EqualTo(TestData.CardTestProduct.ProductName), "The name of product in the basket is not same as in test data");
 

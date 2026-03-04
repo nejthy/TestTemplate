@@ -27,11 +27,8 @@ public class HeaderContainer : BaseComponent
     }
 
     /// <summary>
-    /// Clears all items from the basket.
+    /// Gets the current basket count; zero if the count element isn't visible.
     /// </summary>
-    /// <returns>
-    /// The current basket count.
-    /// </returns>
     public int GetBasketCount()
     {
         if (BasketCount.IsNotDisplayed())
@@ -42,6 +39,37 @@ public class HeaderContainer : BaseComponent
         return int.TryParse(BasketCount.GetText(), out int count) ?
                             count :
                             throw new InvalidOperationException("Failed to parse basket count.");
+    }
+
+    /// <summary>
+    /// Waits until the displayed basket count reaches <paramref name="expected" />
+    /// or a timeout elapses.
+    /// Returns whatever value was present at the end of the wait.
+    /// </summary>
+    public int WaitForBasketCount(int expected, int timeoutSeconds = 5)
+    {
+        bool reached = false;
+        try
+        {
+            Wait.GetCustomWait(timeout: (uint)timeoutSeconds)
+                .SetTimeoutMessage($"Basket count did not reach {expected} within {timeoutSeconds}s.")
+                .Until(_ =>
+                {
+                    if (BasketCount.IsDisplayed()
+                        && int.TryParse(BasketCount.GetText(), out int c))
+                    {
+                        reached = (c == expected);
+                        return reached;
+                    }
+                    return false;
+                });
+        }
+        catch (WebDriverTimeoutException)
+        {
+            // ignore, reached may be false
+        }
+
+        return GetBasketCount();
     }
 
     /// <summary>
